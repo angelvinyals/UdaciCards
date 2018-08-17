@@ -1,6 +1,13 @@
-import React from 'react';
-import { Button,View, Text } from 'react-native';
-import { createStackNavigator } from 'react-navigation';
+import React from 'react'
+import { StyleSheet, Button, View, Text, StatusBar } from 'react-native'
+import { createStackNavigator } from 'react-navigation'
+import { createStore, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
+import reducer from './reducers'
+import { purple, white } from './utils/colors'
+import { Constants } from 'expo'
+
+import DeckList from './components/DeckList';
 
 class DeckListScreen extends React.Component {
   render() {
@@ -84,7 +91,7 @@ class NewQuestionScreen extends React.Component {
   }
 }
 
-const RootStack = createStackNavigator({
+const MainNavigator  = createStackNavigator({
   DeckList: {
     screen: DeckListScreen,
   },
@@ -105,6 +112,30 @@ const RootStack = createStackNavigator({
 
 export default class App extends React.Component {
   render() {
-    return <RootStack />;
+    return (
+      <Provider store={createStore(reducer)}>
+        <View style={styles.container}>
+          <UdaciStatusBar backgroundColor={purple} barStyle="light-content" />
+
+          <MainNavigator />
+        </View>
+      </Provider>
+    )
   }
 }
+
+function UdaciStatusBar ({backgroundColor, ...props}) {
+  return (
+    <View style={{ backgroundColor, height: Constants.statusBarHeight }}>
+      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff'
+  }
+});
+
