@@ -9,27 +9,6 @@ import { Constants } from 'expo'
 
 import DeckList from './components/DeckList';
 
-class DeckListScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Decks List',
-  };
-
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Deck List view</Text>
-        <Button
-          title="Go to Individual Deck"
-          onPress={() => this.props.navigation.navigate('IndividualDeck')}
-        />
-        <Button
-          title="Go to Home-(deckList)"
-          onPress={() => this.props.navigation.navigate('DeckList')}
-        />
-      </View>
-    );
-  }
-}
 
 class IndividualDeckScreen extends React.Component {
   render() {
