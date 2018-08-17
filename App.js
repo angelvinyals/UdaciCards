@@ -10,6 +10,10 @@ import { Constants } from 'expo'
 import DeckList from './components/DeckList';
 
 class DeckListScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Decks List',
+  };
+
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -93,7 +97,7 @@ class NewQuestionScreen extends React.Component {
 
 const MainNavigator  = createStackNavigator({
   DeckList: {
-    screen: DeckListScreen,
+    screen: DeckList,
   },
   IndividualDeck: {
     screen: IndividualDeckScreen,
