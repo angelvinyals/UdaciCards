@@ -1,16 +1,19 @@
 {
   "expo": {
     "name": "UdaciCards",
-    "description": "This project is really great.",
+    "description": "mobile application (Android or iOS - or both) that allows users to study collections of flashcards. \nThe app will allow users to create different categories of flashcards called \"decks\", add flashcards to those decks, then take quizzes on those decks",
     "slug": "UdaciCards",
     "privacy": "public",
     "sdkVersion": "29.0.0",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icons8-brains-512.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/brandon-lopez-405368-unsplash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -22,6 +25,23 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "android": {
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "CAMERA",
+        "MANAGE_DOCUMENTS",
+        "READ_EXTERNAL_STORAGE",
+        "READ_PHONE_STATE",
+        "VIBRATE",
+        "WAKE_LOCK",
+        "WRITE_EXTERNAL_STORAGE",
+        "com.sec.android.provider.badge.permission.READ",
+        "com.sec.android.provider.badge.permission.WRITE",
+        "com.sonyericsson.home.permission.BROADCAST_BADGE"
+      ]
+    },
+    "githubUrl": "https://github.com/angelvinyals/UdaciCards"
   }
 }
