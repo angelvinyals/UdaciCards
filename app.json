@@ -26,22 +26,7 @@
     "ios": {
       "supportsTablet": true
     },
-    "android": {
-      "permissions": [
-        "ACCESS_COARSE_LOCATION",
-        "ACCESS_FINE_LOCATION",
-        "CAMERA",
-        "MANAGE_DOCUMENTS",
-        "READ_EXTERNAL_STORAGE",
-        "READ_PHONE_STATE",
-        "VIBRATE",
-        "WAKE_LOCK",
-        "WRITE_EXTERNAL_STORAGE",
-        "com.sec.android.provider.badge.permission.READ",
-        "com.sec.android.provider.badge.permission.WRITE",
-        "com.sonyericsson.home.permission.BROADCAST_BADGE"
-      ]
-    },
+    
     "githubUrl": "https://github.com/angelvinyals/UdaciCards"
   }
 }
