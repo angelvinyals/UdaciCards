@@ -4,13 +4,22 @@ import {
   FlatList,
   StyleSheet,
   View,
+  TouchableOpacity,
 } from 'react-native';
 import {white, gray } from '../utils/colors'
 
 
 const decks = [
-  { key: 'key1', title: 'udacicards', questions: [] },
-  { key: 'key2', title: 'new deck'  , questions: [] }
+  { key: 'key1', 
+    title: 'udacicards', 
+    questions: [
+
+    ]},    
+  { key: 'key2', 
+    title: 'new deck',
+    questions: [
+
+    ]}
   ]
 
 class DeckList extends Component {
@@ -30,6 +39,13 @@ class DeckList extends Component {
     );
   }; 
 
+  onPress = () => {
+    this.props.navigation.navigate('DeckItem', {
+              itemId: 86,
+              otherParam: 'anything you want here',
+            });
+  }
+
   render() {
     
     return (            
@@ -38,8 +54,13 @@ class DeckList extends Component {
         contentContainerStyle={styles.container}
         renderItem={({item}) => 
           <View style={styles.flatview}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.questionsLength}>{item.questions.length} cards</Text>
+            <TouchableOpacity 
+              style={styles.button}
+              onPress={this.onPress}
+            >
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.questionsLength}>{item.questions.length} cards</Text>
+            </TouchableOpacity>
           </View>
         }
         ItemSeparatorComponent={this.renderSeparator}

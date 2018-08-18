@@ -8,9 +8,9 @@ import { purple, white } from './utils/colors'
 import { Constants } from 'expo'
 
 import DeckList from './components/DeckList';
+import DeckItem from './components/DeckItem';
 
-
-class IndividualDeckScreen extends React.Component {
+class DeckItemScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -78,8 +78,8 @@ const MainNavigator  = createStackNavigator({
   DeckList: {
     screen: DeckList,
   },
-  IndividualDeck: {
-    screen: IndividualDeckScreen,
+  DeckItem: {
+    screen: DeckItem,
   },
   Quiz: {
     screen: QuizScreen,
@@ -99,7 +99,6 @@ export default class App extends React.Component {
       <Provider store={createStore(reducer)}>
         <View style={styles.container}>
           <UdaciStatusBar backgroundColor={purple} barStyle="light-content" />
-
           <MainNavigator />
         </View>
       </Provider>
