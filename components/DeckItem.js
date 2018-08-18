@@ -25,11 +25,9 @@ class DeckItem extends Component {
     headerTitleStyle: {
       fontWeight: 'bold',
     },
-  }; 
+  }
 
-
-  render() {
-    
+  render() {    
     return (    
       <View style={styles.container}>        
         <View style={styles.deckprops}>
@@ -39,7 +37,7 @@ class DeckItem extends Component {
         <View style={styles.deckbuttons}>
           <TouchableOpacity
             style={styles.buttonAdd}
-            onPress={() => this.props.navigation.navigate('NewDeck')}
+            onPress={() => this.props.navigation.navigate('NewQuestion')}
           >
             <Text style={[styles.buttonText,{color:black}]}>Add Card</Text>
           </TouchableOpacity>
@@ -57,8 +55,7 @@ class DeckItem extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    
+    flex: 1,    
     marginTop: 0,    
     backgroundColor: white,
   },
@@ -106,4 +103,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default DeckItem;
+export default DeckItem

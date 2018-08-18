@@ -7,22 +7,12 @@ import reducer from './reducers'
 import { purple, white } from './utils/colors'
 import { Constants } from 'expo'
 
-import DeckList from './components/DeckList';
-import DeckItem from './components/DeckItem';
-import Quiz from './components/Quiz';
-import NewDeck from './components/NewDeck';
+import DeckList from './components/DeckList'
+import DeckItem from './components/DeckItem'
+import Quiz from './components/Quiz'
+import NewDeck from './components/NewDeck'
+import NewQuestion from './components/NewQuestion'
 
-
-
-class NewQuestionScreen extends React.Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>New Question view</Text>
-      </View>
-    );
-  }
-}
 
 const MainNavigator  = createStackNavigator({
   DeckList: {
@@ -38,7 +28,7 @@ const MainNavigator  = createStackNavigator({
     screen: NewDeck,
   },
   NewQuestion: {
-    screen: NewQuestionScreen,
+    screen: NewQuestion,
   },
 
 });

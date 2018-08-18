@@ -46,26 +46,26 @@ class Quiz extends Component {
     return (           
         <View style={styles.container}>
           <Text style={styles.questionNumber}>{questionItem} / {quizLength}</Text>         
-          <View style={styles.questionProps}>
+          <View style={styles.containerProps}>
             <Text style={styles.title}>{question.title}</Text>
             <TouchableOpacity
-              onPress={this.correct}
+              onPress={this.toggle}
             >
               <Text style={styles.answerOrQuestion}>Answer</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.questionButtons}>
+          <View style={styles.containerButtons}>
             <TouchableOpacity
               style={styles.buttonCorrect}
               onPress={this.correct}
             >
-              <Text style={[styles.buttonText,{color:white}]}>Correct</Text>
+              <Text style={styles.buttonText}>Correct</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.buttonIncorrect}
               onPress={this.incorrect}
             >
-              <Text style={[styles.buttonText,{color:white}]}>Incorrect</Text>
+              <Text style={styles.buttonText}>Incorrect</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -85,13 +85,13 @@ const styles = StyleSheet.create({
     marginTop: 0,    
     backgroundColor: white,
   },
-  questionProps: {
+  containerProps: {
     flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 2,
   },
-  questionButtons: {
+  containerButtons: {
     flex: 1,
     alignItems: 'center',
     borderRadius: 2,
@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
   buttonText:{
     textAlign:'center',
     fontSize:18,
+    color:white,
   }
 });
 
