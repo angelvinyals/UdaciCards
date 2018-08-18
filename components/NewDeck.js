@@ -9,14 +9,14 @@ import {
 import {white, gray, black, red, green, purple} from '../utils/colors'
 
 
-class NewDeck extends Component {
-
-  state:{
-    text: '' 
-  }
+class NewDeck extends Component { 
 
   static navigationOptions = {
     title: 'New Deck'
+  }
+
+  state:{
+    text: '' 
   }
 
   submit = () =>{

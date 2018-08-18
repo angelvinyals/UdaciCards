@@ -10,21 +10,13 @@ import {white, gray, black, red, green, purple} from '../utils/colors'
 
 
 class NewQuestion extends Component {
+  static navigationOptions = {
+    title: 'Add Card'
+  }
 
   state:{
     text: '' 
-  }
-
-  static navigationOptions = {
-    title: 'Add Card',
-    headerStyle: {
-      backgroundColor: black,
-    },
-    headerTintColor: white,
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
-  }
+  }  
 
   submit = () =>{
     console.log('submit')
