@@ -17,14 +17,7 @@ const item= {
 
 class DeckItem extends Component {
   static navigationOptions = {
-    title: `${item.title}`,
-    headerStyle: {
-      backgroundColor: black,
-    },
-    headerTintColor: white,
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
+    title: `${item.title}`
   }
 
   render() {    

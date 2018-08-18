@@ -19,14 +19,7 @@ const question= {
 
 class Quiz extends Component {
   static navigationOptions = {
-    title: 'Quiz',
-    headerStyle: {
-      backgroundColor: black,
-    },
-    headerTintColor: white,
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
+    title: 'Quiz'
   }
 
   correct = () =>{

@@ -1,10 +1,10 @@
 import React from 'react'
-import { StyleSheet, Button, View, Text, StatusBar } from 'react-native'
-import { createStackNavigator } from 'react-navigation'
+import { StyleSheet, Button, View, Text, StatusBar, Platform } from 'react-native'
+import { createStackNavigator , createMaterialTopTabNavigator} from 'react-navigation'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import reducer from './reducers'
-import { purple, white } from './utils/colors'
+import { purple, white, black } from './utils/colors'
 import { Constants } from 'expo'
 
 import DeckList from './components/DeckList'
@@ -14,24 +14,69 @@ import NewDeck from './components/NewDeck'
 import NewQuestion from './components/NewQuestion'
 
 
-const MainNavigator  = createStackNavigator({
-  DeckList: {
-    screen: DeckList,
+const TopTabs = createMaterialTopTabNavigator(
+  {
+    'DeckList': DeckList,
+    'NewDeck': NewDeck,
   },
-  DeckItem: {
-    screen: DeckItem,
-  },
-  Quiz: {
-    screen: Quiz,
-  },
-  NewDeck: {
-    screen: NewDeck,
-  },
-  NewQuestion: {
-    screen: NewQuestion,
-  },
+  {
+    initialRouteName: 'DeckList',
+    tabBarPosition: 'top',
+    swipeEnabled: true,
+    animationEnabled: true,
+    tabBarOptions:{
+      activeTintColor:white,
+      inactiveTintColor: white,
+      upperCaseLabel: true,
+      labelStyle: {
+        fontSize: 18,
+        color: black,
+      },
+      style: {
+        backgroundColor: white,
+      },
+    }
+  }
+);
 
-});
+
+const MainNavigator  = createStackNavigator(
+  {
+    Home: {
+      screen: TopTabs,
+      navigationOptions: {
+          header:null
+      }
+    },
+    DeckItem: {
+      screen: DeckItem,
+    },
+    Quiz: {
+      screen: Quiz,
+    },
+    NewDeck: {
+      screen: NewDeck,
+      navigationOptions: {
+          header:null
+      }
+    },
+    NewQuestion: {
+      screen: NewQuestion,
+    },
+  },
+  {
+    initialRouteName: "Home",
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: black,
+      },
+      headerTintColor: white,
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }
+  }
+)
 
 export default class App extends React.Component {
   render() {
