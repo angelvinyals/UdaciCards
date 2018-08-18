@@ -10,21 +10,9 @@ import { Constants } from 'expo'
 import DeckList from './components/DeckList';
 import DeckItem from './components/DeckItem';
 import Quiz from './components/Quiz';
+import NewDeck from './components/NewDeck';
 
 
-class NewDeckScreen extends React.Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>New Deck view</Text>
-        <Button
-          title="Go back"
-          onPress={() => this.props.navigation.goBack()}
-        />
-      </View>
-    );
-  }
-}
 
 class NewQuestionScreen extends React.Component {
   render() {
@@ -47,7 +35,7 @@ const MainNavigator  = createStackNavigator({
     screen: Quiz,
   },
   NewDeck: {
-    screen: NewDeckScreen,
+    screen: NewDeck,
   },
   NewQuestion: {
     screen: NewQuestionScreen,
