@@ -9,46 +9,8 @@ import { Constants } from 'expo'
 
 import DeckList from './components/DeckList';
 import DeckItem from './components/DeckItem';
+import Quiz from './components/Quiz';
 
-class DeckItemScreen extends React.Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Individual Deck view</Text>
-        <Button
-          title="Go to Quiz"
-          onPress={() => this.props.navigation.navigate('Quiz')}
-        />
-        <Button
-          title="Go to Home-(deckList)"
-          onPress={() => this.props.navigation.navigate('DeckList')}
-        />
-        <Button
-          title="Go back"
-          onPress={() => this.props.navigation.goBack()}
-        />
-      </View>
-    );
-  }
-}
-
-class QuizScreen extends React.Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Quiz view</Text>
-        <Button
-          title="Go to Home-(deckList)"
-          onPress={() => this.props.navigation.navigate('DeckList')}
-        />
-        <Button
-          title="Go back"
-          onPress={() => this.props.navigation.goBack()}
-        />
-      </View>
-    );
-  }
-}
 
 class NewDeckScreen extends React.Component {
   render() {
@@ -82,7 +44,7 @@ const MainNavigator  = createStackNavigator({
     screen: DeckItem,
   },
   Quiz: {
-    screen: QuizScreen,
+    screen: Quiz,
   },
   NewDeck: {
     screen: NewDeckScreen,
