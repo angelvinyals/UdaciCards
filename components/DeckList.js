@@ -10,21 +10,6 @@ import {white, gray } from '../utils/colors'
 
 import {fetchDecks} from '../utils/_DATA';
 
-/*
-const decks = [
-  { key: 'key1', 
-    title: 'udacicards', 
-    questions: [
-
-    ]},    
-  { key: 'key2', 
-    title: 'new deck',
-    questions: [
-
-    ]}
-  ]
-*/
-
 class DeckList extends Component {
   static navigationOptions = {
     title: 'Decks'

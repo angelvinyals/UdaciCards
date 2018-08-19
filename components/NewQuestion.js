@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   TextInput
 } from 'react-native';
-import {white, gray, black, red, green, purple} from '../utils/colors'
+import {white, black} from '../utils/colors'
+import {saveDecks} from '../utils/_DATA';
 
 
 class NewQuestion extends Component {
@@ -17,19 +18,33 @@ class NewQuestion extends Component {
   state = {
     question: '',
     answer:'' 
-  }  
+  } 
 
-  submit = () =>{
-    console.log('submit')
+  handleQuestionChange = question => this.setState({ question });
+
+  handleAnswerChange = answer => this.setState({ answer });
+
+
+  handleSubmit = () =>{
+    console.log('save NEW CARD')
+
+    let { keyDeck, title, questionsLength} = this.props.navigation.state.params;
+    const newQuestion = this.state;    
+    console.log('keyDeck: ', keyDeck)
+    console.log('questionsLength:', questionsLength)
+
+    newQuestion["key"]= `${title}${parseInt(questionsLength,10)+1}`
+    console.log('new question: ', newQuestion)
+
+  
+    this.props.navigation.goBack()
+
   }
  
   render() {
 
-    const {keyDeck,title,questionsLength} = this.props.navigation.state.params;
-
-    const{question, answer} = this.state
-    console.log('question in state component: ', question)
-    console.log('answer in state component: ',  answer) 
+    const { keyDeck, title, questionsLength } = this.props.navigation.state.params;
+    const { question, answer } = this.state
     
     return ( 
 
@@ -42,7 +57,7 @@ class NewQuestion extends Component {
               style={styles.inputDeckTitle}
               placeholder= {'input the question'} 
               value={question}
-              onChangeText={(question) => this.setState({question})}
+              onChangeText={this.handleQuestionChange}
             />
           </View>
           <View style={styles.containerInput} >
@@ -50,13 +65,13 @@ class NewQuestion extends Component {
               style={styles.inputDeckTitle}
               placeholder= {'input the answer'} 
               value={answer}
-              onChangeText={(answer) => this.setState({answer})}
+              onChangeText={this.handleAnswerChange}
             />
           </View>
           <View style={styles.containerButtons}>
             <TouchableOpacity
               style={styles.buttonSubmit}
-              onPress={this.submit}
+              onPress={this.handleSubmit}
             >
               <Text style={[styles.buttonText,{color:white}]}>Submit</Text>
             </TouchableOpacity>

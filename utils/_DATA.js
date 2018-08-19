@@ -11,8 +11,8 @@ export const decks = [
         key: 'decksReact',
         title: 'React',
         questions: [
-            {id:'React1', question: 'What is React?', answer: 'A library for managing user interfaces'},
-            {id:'React2', question: 'Where do you make Ajax requests in React?', answer: 'The componentDidMount lifecycle event'},
+            {key:'React1', question: 'What is React?', answer: 'A library for managing user interfaces'},
+            {key:'React2', question: 'Where do you make Ajax requests in React?', answer: 'The componentDidMount lifecycle event'},
         ]
     },
     {
@@ -33,11 +33,17 @@ export const decks = [
 ];mobileFlashcards:decks
 
 
-export function saveDecks(decks) {
-    AsyncStorage.setItem('mobileFlashcards:decks', JSON.stringify(decks));
+export const saveDecks = async(decks) => {
+    try{
+        awati AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(decks));
+    }catch (error) {
+        // Error retrieving data
+        alert(err);
+    }
+    
 }
 
-export async function fetchDecks() {
+export const fetchDecks = async() => {
     try {
         const data = await AsyncStorage.getItem(STORAGE_KEY);
         console.log('data = ', data)
@@ -47,6 +53,22 @@ export async function fetchDecks() {
         }
         return decks;
     } catch (error) {
+        // Error retrieving data
+        alert(err);
+    }
+}
+
+export const fetchDeck = async(key) => {
+    try {
+        const data = await AsyncStorage.getItem(STORAGE_KEY);
+        console.log('data = ', data)
+        if (data !== null) {
+            // We have data!!
+            return JSON.parse(data);
+        }
+        return decks;
+    } catch (error) {
+        // Error retrieving data
         alert(err);
     }
 }
