@@ -8,7 +8,9 @@ import {
 } from 'react-native';
 import {white, gray } from '../utils/colors'
 
+import {fetchDecks} from '../utils/_DATA';
 
+/*
 const decks = [
   { key: 'key1', 
     title: 'udacicards', 
@@ -21,11 +23,23 @@ const decks = [
 
     ]}
   ]
+*/
 
 class DeckList extends Component {
   static navigationOptions = {
     title: 'Decks'
   }; 
+
+  state = {
+    decks: []
+  };
+
+  async componentDidMount() {
+    let decks = await fetchDecks();
+    this.setState({
+        decks
+    })
+  }
 
   renderSeparator = () => {
     return (
@@ -47,13 +61,15 @@ class DeckList extends Component {
   }
 
   render() {
-    
+
+    const{decks} = this.state
+
     return (            
       <FlatList          
         data={decks}
         contentContainerStyle={styles.container}
         renderItem={({item}) => 
-          <View style={styles.flatview}>
+          <View >
             <TouchableOpacity 
               style={styles.button}
               onPress={this.onPress}
@@ -75,19 +91,19 @@ const styles = StyleSheet.create({
     marginTop: 0,    
     backgroundColor: white,
   },
-  flatview: {
-    alignItems: 'center',
+  button:{
+    alignItems:'center',
     paddingTop: 50,
     paddingBottom: 50,
-    borderRadius: 2,
-  },
+  },  
   title: {    
     fontSize: 30
   },
   questionsLength: {
     color: gray,
     fontSize: 20
-  }  
+  },
+  
 });
 
 export default DeckList;
