@@ -11,18 +11,13 @@ import {white, gray, black, red, green, purple} from '../utils/colors'
 
 class NewQuestion extends Component {
   static navigationOptions = {
-    title: 'Add Card'
+    title: 'Add a Card'
   }
 
-  state:{
+  state = {
     question: '',
     answer:'' 
   }  
-
-  onChangeText = (text) =>{
-    console.log(text)
-    this.setState({question})
-  }
 
   submit = () =>{
     console.log('submit')
@@ -31,11 +26,13 @@ class NewQuestion extends Component {
   render() {
 
     const {keyDeck,title,questionsLength} = this.props.navigation.state.params;
-    console.log('keyDeck: ',keyDeck)
-    console.log('title: ',title)
-    console.log('questionsLength: ', questionsLength)
+
+    const{question, answer} = this.state
+    console.log('question in state component: ', question)
+    console.log('answer in state component: ',  answer) 
     
-    return (           
+    return ( 
+
         <View style={styles.containerMain}>   
           <View style={styles.containerText} >    
             <Text style={styles.introMessage}> add a question to {title} deck</Text>  
@@ -44,14 +41,16 @@ class NewQuestion extends Component {
             <TextInput
               style={styles.inputDeckTitle}
               placeholder= {'input the question'} 
-              onChangeText={(text) => this.setState({question})}
+              value={question}
+              onChangeText={(question) => this.setState({question})}
             />
           </View>
           <View style={styles.containerInput} >
             <TextInput
               style={styles.inputDeckTitle}
               placeholder= {'input the answer'} 
-              onChangeText={(text) => this.setState({answer})}
+              value={answer}
+              onChangeText={(answer) => this.setState({answer})}
             />
           </View>
           <View style={styles.containerButtons}>
