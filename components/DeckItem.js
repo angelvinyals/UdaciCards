@@ -8,13 +8,6 @@ import {
 } from 'react-native';
 import {white, gray, black } from '../utils/colors'
 
-const item= { 
-    key: 'key1', 
-    title: 'udacicards', 
-    questions: [
-      
-    ]}
-
 class DeckItem extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -22,21 +15,29 @@ class DeckItem extends Component {
     };
   };
 
+  onPressAddCard = (keyDeck, title, questionsLength) => {   
+    this.props.navigation.navigate('NewQuestion',{
+      keyDeck,
+      title,
+      questionsLength,
+    })
+  }
+
   render() { 
 
-    const {key,title,questions} = this.props.navigation.state.params;
-    console.log(key,title,questions)
+    const {keyDeck,title,questions} = this.props.navigation.state.params;
+    const questionsLength = questions.length
 
     return (    
       <View style={styles.container}>        
         <View style={styles.deckprops}>
           <Text style={styles.title}>{title}</Text>
-          <Text style={styles.questionsLength}>{questions.length} cards</Text>
+          <Text style={styles.questionsLength}>{questionsLength} cards</Text>
         </View>
         <View style={styles.deckbuttons}>
           <TouchableOpacity
             style={styles.buttonAdd}
-            onPress={() => this.props.navigation.navigate('NewQuestion')}
+            onPress={() => this.onPressAddCard(keyDeck, title, questionsLength)}
           >
             <Text style={[styles.buttonText,{color:black}]}>Add Card</Text>
           </TouchableOpacity>

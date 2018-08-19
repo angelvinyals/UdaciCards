@@ -55,7 +55,7 @@ class DeckList extends Component {
 
   onPress = ({key, title, questions}) => {   
     this.props.navigation.navigate('DeckItem',{
-      key,
+      keyDeck: key,
       title,       
       questions,
     })
