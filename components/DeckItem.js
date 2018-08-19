@@ -16,16 +16,22 @@ const item= {
     ]}
 
 class DeckItem extends Component {
-  static navigationOptions = {
-    title: `${item.title}`
-  }
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.getParam('title', '...some title on DeckItem'),
+    };
+  };
 
-  render() {    
+  render() { 
+
+    const {key,title,questions} = this.props.navigation.state.params;
+    console.log(key,title,questions)
+
     return (    
       <View style={styles.container}>        
         <View style={styles.deckprops}>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.questionsLength}>{item.questions.length} cards</Text>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.questionsLength}>{questions.length} cards</Text>
         </View>
         <View style={styles.deckbuttons}>
           <TouchableOpacity

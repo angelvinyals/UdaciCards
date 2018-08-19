@@ -53,11 +53,12 @@ class DeckList extends Component {
     );
   }; 
 
-  onPress = () => {
-    this.props.navigation.navigate('DeckItem', {
-              itemId: 86,
-              otherParam: 'anything you want here',
-            });
+  onPress = ({key, title, questions}) => {   
+    this.props.navigation.navigate('DeckItem',{
+      key,
+      title,       
+      questions,
+    })
   }
 
   render() {
@@ -72,7 +73,7 @@ class DeckList extends Component {
           <View >
             <TouchableOpacity 
               style={styles.button}
-              onPress={this.onPress}
+              onPress={() =>this.onPress(item)}
             >
               <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.questionsLength}>{item.questions.length} cards</Text>
