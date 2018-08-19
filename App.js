@@ -4,7 +4,7 @@ import { createStackNavigator , createMaterialTopTabNavigator} from 'react-navig
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import reducer from './reducers'
-import { purple, white, black } from './utils/colors'
+import { purple, white, black, lightGray} from './utils/colors'
 import { Constants } from 'expo'
 
 import DeckList from './components/DeckList'
@@ -25,12 +25,11 @@ const TopTabs = createMaterialTopTabNavigator(
     swipeEnabled: true,
     animationEnabled: true,
     tabBarOptions:{
-      activeTintColor:white,
-      inactiveTintColor: white,
+      activeTintColor:black,
+      inactiveTintColor: lightGray,
       upperCaseLabel: true,
       labelStyle: {
         fontSize: 18,
-        color: black,
       },
       style: {
         backgroundColor: white,
