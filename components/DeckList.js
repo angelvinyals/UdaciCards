@@ -26,7 +26,6 @@ class DeckList extends Component {
   componentDidMount = async () => {
     console.log('inside componentDidMount in DeckList.............');
     const decks =  await this.getKey(STORAGE_KEY)
-    console.log('decks in componentDidMount: ',decks);
 
     if (decks !== null) {
       // We have data!!
@@ -34,18 +33,18 @@ class DeckList extends Component {
         isLoading: false,
         decks: JSON.parse(decks),
       })
+    } else {
+      console.log('IMPORTANT : NOT DECKS SAVED IN STATE'); 
     }
-    
-    
+       
   }
 
   async getKey(storageKey) {
     try {
       const value = await AsyncStorage.getItem(storageKey);
-      console.log('after getKey...............................: ', JSON.parse(value)) 
       return value     
     } catch (error) {
-      console.log("Error retrieving data from  getKey" + error);
+      console.log("Error retrieving data from  getKey IN DeckList :" + error);
     }
   }
 
@@ -61,8 +60,12 @@ class DeckList extends Component {
     );
   }; 
 
-  onPress = () => {   
-    this.props.navigation.navigate('DeckItem')
+  onPress = (keyDeck,title) => {   
+    console.log('key passed to deckitems with navigate params from  DeckList: ', keyDeck)
+    this.props.navigation.navigate('DeckItem',{
+      keyDeck,
+      title
+    })
   }
 
   render() {
@@ -71,12 +74,9 @@ class DeckList extends Component {
     if (this.state.isLoading) {
       return <View><Text>Loading Decks on DeckList component...</Text></View>;
     }
-    console.log('this.state: ', this.state);
 
     const{decks} = this.state   
-    console.log('decks........: ', decks);
     const decksArray= Object.values(decks)
-    console.log('decksArray: ', decksArray)
 
     return (            
       <FlatList          
@@ -86,7 +86,7 @@ class DeckList extends Component {
           <View >
             <TouchableOpacity 
               style={styles.button}
-              onPress={this.onPress}
+              onPress={()=>this.onPress(item.key, item.title)}
             >
               <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.questionsLength}>{Object.keys(item.questions).length} cards</Text>
