@@ -93,7 +93,6 @@ export default class App extends React.Component {
   componentDidMount = async () => {
     console.log('inside componentDidMount on App.............');
     await this.resetKey(STORAGE_KEY, decks)
-    //await this.getKey(STORAGE_KEY)
     this.setState({isLoading: false})
   }
 
@@ -109,16 +108,7 @@ export default class App extends React.Component {
       console.log("Error resetting data from  reset Key:" + error);
     }
   }
-/*
-  async getKey(storageKey) {
-    try {
-      const value = await AsyncStorage.getItem(storageKey);
-      console.log('after getKey...............................: ', JSON.parse(value))     
-    } catch (error) {
-      console.log("Error retrieving data from  getKey" + error);
-    }
-  }
-*/
+
 
   render() {
     console.log('inside render method on App.............');
