@@ -4,10 +4,12 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  AsyncStorage
 } from 'react-native';
 import {white, black} from '../utils/colors'
-import {saveDecks} from '../utils/_DATA';
+import {saveNewQuestion} from '../utils/_DATA';
+import {STORAGE_KEY} from'../utils/_DATA'; 
 
 
 class NewQuestion extends Component {
@@ -28,22 +30,49 @@ class NewQuestion extends Component {
   handleSubmit = () =>{
     console.log('save NEW CARD')
 
-    let { keyDeck, title, questionsLength} = this.props.navigation.state.params;
+    let { keyDeck, title, questionsLength, questions} = this.props.navigation.state.params;
     const newQuestion = this.state;    
     console.log('keyDeck: ', keyDeck)
     console.log('questionsLength:', questionsLength)
-
-    newQuestion["key"]= `${title}${parseInt(questionsLength,10)+1}`
+    const keyNewQuestion = `${title}${parseInt(questionsLength,10)+1}`
+    newQuestion["key"]= keyNewQuestion
     console.log('new question: ', newQuestion)
 
-  
-    this.props.navigation.goBack()
+    const decks_delta= {
+      [keyDeck]:{
+        questions:{
+          [keyNewQuestion]:newQuestion
+        }
+      }
+    }
 
+    console.log('decks_delta: ',decks_delta)
+    
+    this.saveKey(STORAGE_KEY, decks_delta)
+   
+
+    this.props.navigation.navigate('DeckItem',{
+      keyDeck,
+      fromNewQuestion: true,
+    })
+
+  }
+
+  async saveKey(storageKey, decks_delta) {
+    console.log('inside saveKey.............')
+    try {
+      await AsyncStorage.mergeItem(storageKey, JSON.stringify(decks_delta), () => {
+        AsyncStorage.getItem(storageKey, (err, result) => {
+          console.log('result:  ', JSON.parse(result));
+        });
+      });
+    } catch (error) {
+      console.log("Error saving data" + error);
+    }
   }
  
   render() {
-
-    const { keyDeck, title, questionsLength } = this.props.navigation.state.params;
+    const { title} = this.props.navigation.state.params;
     const { question, answer } = this.state
     
     return ( 

@@ -19,6 +19,7 @@ class DeckItem extends Component {
 
   state = {
     isLoading:true,
+    updatedDeck:false,
     deck: null
   };
 
@@ -50,23 +51,48 @@ class DeckItem extends Component {
     }
   }
 
+  updateState = async () => {
+    console.log('inside updateState in DeckItem.............');
+    const {keyDeck} = this.props.navigation.state.params 
+    const decks =  await this.getKey(STORAGE_KEY)
+
+    if (decks !== null) {
+      // We have data!!
+      const deck= JSON.parse(decks)[keyDeck]
+      console.log('deck is: ', deck)
+      this.setState({ 
+        updatedDeck : true,
+        deck,
+      })
+    } else {
+      console.log('IMPORTANT : DECK NOT SAVED IN STATE COMPONENT'); 
+    }
+       
+  }
+
   onPressAddCard = () => { 
-    const {keyDeck,title,questions} = this.props.navigation.state.params 
+    const {keyDeck} = this.props.navigation.state.params 
     this.props.navigation.navigate('NewQuestion',{
       keyDeck,
-      title,
-      questions,
-      questionsLength: Object.keys(questions).length
+      title: this.state.deck.title,
+      questions: this.state.deck.questions,
+      questionsLength: Object.keys(this.state.deck.questions).length
     })
   }
 
 
   render() { 
 
-    const {keyDeck} = this.props.navigation.state.params
+    const {keyDeck,fromNewQuestion} = this.props.navigation.state.params
 
     if (this.state.isLoading) {
       return <View><Text>Loading Deck on DeckItem component...</Text></View>;
+    }
+    const {updatedDeck}= this.state
+
+    if (fromNewQuestion && !updatedDeck) {
+      console.log('go  to updateState()...........')
+      this.updateState()
     }
     
     const {deck}= this.state
