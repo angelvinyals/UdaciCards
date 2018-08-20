@@ -98,26 +98,21 @@ export default class App extends React.Component {
 
   async resetKey(storageKey, objectToSave) {
     console.log('resetKey ...................................')
-    console.log('storageKey: ', storageKey)
-    console.log('decks : ', objectToSave)
     try {
       await AsyncStorage.removeItem(storageKey);
-      console.log('after removeItem....')
       const value = await AsyncStorage.setItem(storageKey, JSON.stringify(objectToSave));
     } catch (error) {
-      console.log("Error resetting data from  reset Key:" + error);
+      console.log("Error resetting data from  resetKey in App.js:" + error);
     }
   }
 
 
   render() {
-    console.log('inside render method on App.............');
 
     if (this.state.isLoading) {
       return <View><Text>Loading Decks on App component...</Text></View>;
     }
 
-    console.log('this.state.isLoading: ', this.state.isLoading);
     return (
       
         <View style={styles.container}>
