@@ -1,9 +1,6 @@
 import React from 'react'
-import { StyleSheet, Button, View, Text, StatusBar, Platform } from 'react-native'
+import { StyleSheet, Button, View, Text, StatusBar, Platform, AsyncStorage } from 'react-native'
 import { createStackNavigator , createMaterialTopTabNavigator} from 'react-navigation'
-import { createStore, applyMiddleware } from 'redux'
-import { Provider } from 'react-redux'
-import reducer from './reducers'
 import { purple, white, black, lightGray} from './utils/colors'
 import { Constants } from 'expo'
 
@@ -12,6 +9,7 @@ import DeckItem from './components/DeckItem'
 import Quiz from './components/Quiz'
 import NewDeck from './components/NewDeck'
 import NewQuestion from './components/NewQuestion'
+import {STORAGE_KEY, decks} from'./utils/_DATA';
 
 
 const TopTabs = createMaterialTopTabNavigator(
@@ -87,14 +85,56 @@ const MainNavigator  = createStackNavigator(
 )
 
 export default class App extends React.Component {
+
+  state = {
+    isLoading: true
+  }
+
+  componentDidMount = async () => {
+    console.log('inside componentDidMount on App.............');
+    await this.resetKey(STORAGE_KEY, decks)
+    //await this.getKey(STORAGE_KEY)
+    this.setState({isLoading: false})
+  }
+
+  async resetKey(storageKey, objectToSave) {
+    console.log('resetKey ...................................')
+    console.log('storageKey: ', storageKey)
+    console.log('decks : ', objectToSave)
+    try {
+      await AsyncStorage.removeItem(storageKey);
+      console.log('after removeItem....')
+      const value = await AsyncStorage.setItem(storageKey, JSON.stringify(objectToSave));
+    } catch (error) {
+      console.log("Error resetting data from  reset Key:" + error);
+    }
+  }
+/*
+  async getKey(storageKey) {
+    try {
+      const value = await AsyncStorage.getItem(storageKey);
+      console.log('after getKey...............................: ', JSON.parse(value))     
+    } catch (error) {
+      console.log("Error retrieving data from  getKey" + error);
+    }
+  }
+*/
+
   render() {
+    console.log('inside render method on App.............');
+
+    if (this.state.isLoading) {
+      return <View><Text>Loading Decks on App component...</Text></View>;
+    }
+
+    console.log('this.state.isLoading: ', this.state.isLoading);
     return (
-      <Provider store={createStore(reducer)}>
+      
         <View style={styles.container}>
           <UdaciStatusBar backgroundColor={purple} barStyle="light-content" />
           <MainNavigator />
         </View>
-      </Provider>
+     
     )
   }
 }
