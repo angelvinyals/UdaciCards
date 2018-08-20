@@ -5,8 +5,10 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
+  AsyncStorage
 } from 'react-native';
 import {white, gray, black } from '../utils/colors'
+import {STORAGE_KEY, decks2} from'../utils/_DATA';
 
 class DeckItem extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -15,29 +17,71 @@ class DeckItem extends Component {
     };
   };
 
-  onPressAddCard = (keyDeck, title, questionsLength) => {   
+  state = {
+    isLoading:true,
+    deck: null
+  };
+
+  componentDidMount = async () => {
+    console.log('inside componentDidMount in DeckItem.............');
+    const {keyDeck} = this.props.navigation.state.params 
+    const decks =  await this.getKey(STORAGE_KEY)
+
+    if (decks !== null) {
+      // We have data!!
+      const deck= JSON.parse(decks)[keyDeck]
+      console.log('deck is: ', deck)
+      this.setState({ 
+        isLoading: false,
+        deck,
+      })
+    } else {
+      console.log('IMPORTANT : DECK NOT SAVED IN STATE COMPONENT'); 
+    }
+       
+  }
+
+  async getKey(storageKey) {
+    try {
+      const value = await AsyncStorage.getItem(storageKey);
+      return value     
+    } catch (error) {
+      console.log("Error retrieving data from  getKey IN DeckList :" + error);
+    }
+  }
+
+  onPressAddCard = () => { 
+    const {keyDeck,title,questions} = this.props.navigation.state.params 
     this.props.navigation.navigate('NewQuestion',{
       keyDeck,
       title,
-      questionsLength,
+      questions,
+      questionsLength: Object.keys(questions).length
     })
   }
 
+
   render() { 
 
-    const {keyDeck,title,questions} = this.props.navigation.state.params;
-    const questionsLength = questions.length
+    const {keyDeck} = this.props.navigation.state.params
+
+    if (this.state.isLoading) {
+      return <View><Text>Loading Deck on DeckItem component...</Text></View>;
+    }
+    
+    const {deck}= this.state
+    const questionsLength = Object.keys(deck.questions).length
 
     return (    
       <View style={styles.container}>        
         <View style={styles.deckprops}>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title}>{deck.title}</Text>
           <Text style={styles.questionsLength}>{questionsLength} cards</Text>
         </View>
         <View style={styles.deckbuttons}>
           <TouchableOpacity
             style={styles.buttonAdd}
-            onPress={() => this.onPressAddCard(keyDeck, title, questionsLength)}
+            onPress={this.onPressAddCard}
           >
             <Text style={[styles.buttonText,{color:black}]}>Add Card</Text>
           </TouchableOpacity>
