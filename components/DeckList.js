@@ -9,18 +9,20 @@ import {
 } from 'react-native';
 import {white, gray } from '../utils/colors'
 
-import {fetchDecks} from '../utils/_DATA';
 import {STORAGE_KEY} from'../utils/_DATA';
 
 
-class DeckList extends Component {
-  static navigationOptions = {
-    title: 'Decks'
-  }; 
+class DeckList extends Component { 
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.getParam('title', 'Decks'),
+    };
+  };
 
   state = {
     isLoading:true,
-    decks: null
+    decks: null,
+    hasToUpdate:false,
   };
 
   componentDidMount = async () => {
@@ -38,6 +40,7 @@ class DeckList extends Component {
     }
        
   }
+
 
   async getKey(storageKey) {
     try {
@@ -60,23 +63,64 @@ class DeckList extends Component {
     );
   }; 
 
-  onPress = (keyDeck,title) => {   
-    console.log('key passed to deckitems with navigate params from  DeckList: ', keyDeck)
+  updateState = async () => {
+    console.log('DEKCLIST: inside updateState .............');
+    const decks =  await this.getKey(STORAGE_KEY)
+    console.log('decks: ', decks);
+    if (decks !== null) {
+      // We have data!!
+      //console.log('navigation params:', this.props.navigation.state.params)
+      //this.props.navigation.setParams({ hasToUpdateParent: true })
+      //console.log('navigation params:', this.props.navigation.state.params)
+      await this.setState({         
+        decks:JSON.parse(decks),
+        hasToUpdate : false,
+      })
+    } else {
+      console.log('IMPORTANT : DECK NOT SAVED IN STATE COMPONENT'); 
+    }
+       
+  }
+
+  onGoDeckItem = (keyDeck,title) => { 
+    console.log('DEKCLIST: inside onGoDeckItem .............');  
+    console.log('navigated to DECKITEMS with this params: ', keyDeck , title)
     this.props.navigation.navigate('DeckItem',{
       keyDeck,
-      title
+      title,
+      onGoBack: (param) => this.refresh(param),
     })
   }
 
+  refresh = ({hasToUpdateParent}) => {
+    console.log('DEKCLIST: inside refresh .............');
+    console.log('hasToUpdateParent: ', hasToUpdateParent)
+    const hasToUpdate= hasToUpdateParent? hasToUpdateParent: false
+    console.log('hastoUpdate:' , hasToUpdate)
+    this.setState({hasToUpdate: hasToUpdate})  
+  }
+
   render() {
-    console.log('inside render method in DeckList.............');
+    console.log('DEKCLIST: inside render........................');
 
     if (this.state.isLoading) {
+      console.log('isLoading is :', this.state.isLoading)
       return <View><Text>Loading Decks on DeckList component...</Text></View>;
     }
+    console.log('isLoading is :', this.state.isLoading)
+
+    if (this.state.hasToUpdate) {
+      console.log('----------- hasToUpdate is:',this.state.hasToUpdate)
+      this.updateState()
+      return <View><Text>Updating Decks on DeckList component...</Text></View>;
+    }
+    console.log('----------- hasToUpdate is:', this.state.hasToUpdate)
+
 
     const{decks} = this.state   
     const decksArray= Object.values(decks)
+
+    console.log("finally render deck's list......")
 
     return (            
       <FlatList          
@@ -86,7 +130,7 @@ class DeckList extends Component {
           <View >
             <TouchableOpacity 
               style={styles.button}
-              onPress={()=>this.onPress(item.key, item.title)}
+              onPress={()=>this.onGoDeckItem(item.key, item.title)}
             >
               <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.questionsLength}>{Object.keys(item.questions).length} cards</Text>

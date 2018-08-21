@@ -5,7 +5,8 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  Button
 } from 'react-native';
 import {white, gray, black } from '../utils/colors'
 import {STORAGE_KEY, decks2} from'../utils/_DATA';
@@ -14,26 +15,36 @@ class DeckItem extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: navigation.getParam('title', '...some title on DeckItem'),
-    };
+      headerRight: <Button 
+        title="test" 
+        onPress={() => {
+            navigation.state.params.onGoBack({'hasToUpdateParent': navigation.getParam('hasToUpdateParent')})            
+            navigation.goBack()
+          }          
+        }
+      />
+    }
   };
 
   state = {
     isLoading:true,
-    updatedDeck:false,
-    deck: null
+    isUpdated:false,
+    hasToUpdate:false,
+    deck: null,
   };
 
   componentDidMount = async () => {
-    console.log('inside componentDidMount in DeckItem.............');
+    console.log('DECKITEM inside componentDidMount .............');
     const {keyDeck} = this.props.navigation.state.params 
     const decks =  await this.getKey(STORAGE_KEY)
-
+    console.log('-.-.-.-.-.-after await this.getKey');
     if (decks !== null) {
       // We have data!!
       const deck= JSON.parse(decks)[keyDeck]
       console.log('deck is: ', deck)
       this.setState({ 
         isLoading: false,
+        hasToUpdate: false,
         deck,
       })
     } else {
@@ -44,6 +55,8 @@ class DeckItem extends Component {
 
   async getKey(storageKey) {
     try {
+      console.log('DECKITEM inside getKey .............'); 
+      console.log('-.-.-.-.-.-.getting data from AsyncStorage in DeckItem'); 
       const value = await AsyncStorage.getItem(storageKey);
       return value     
     } catch (error) {
@@ -52,18 +65,23 @@ class DeckItem extends Component {
   }
 
   updateState = async () => {
-    console.log('inside updateState in DeckItem.............');
+    console.log('DECKITEM inside updateState .............'); 
     const {keyDeck} = this.props.navigation.state.params 
     const decks =  await this.getKey(STORAGE_KEY)
-
+    console.log('decks: ', decks);
     if (decks !== null) {
       // We have data!!
+      //console.log('navigation params:', this.props.navigation.state.params)
+      this.props.navigation.setParams({ hasToUpdateParent: true })
+      //console.log('navigation params:', this.props.navigation.state.params)
       const deck= JSON.parse(decks)[keyDeck]
       console.log('deck is: ', deck)
-      this.setState({ 
-        updatedDeck : true,
+     
+      await this.setState({ 
+        hasToUpdate : false,
         deck,
       })
+
     } else {
       console.log('IMPORTANT : DECK NOT SAVED IN STATE COMPONENT'); 
     }
@@ -71,33 +89,48 @@ class DeckItem extends Component {
   }
 
   onPressAddCard = () => { 
+    console.log('DECKITEM inside onPressAddCard--------------------------');
+    console.log('state.deck: ', this.state.deck)
     const {keyDeck} = this.props.navigation.state.params 
     this.props.navigation.navigate('NewQuestion',{
       keyDeck,
       title: this.state.deck.title,
       questions: this.state.deck.questions,
-      questionsLength: Object.keys(this.state.deck.questions).length
+      questionsLength: Object.keys(this.state.deck.questions).length,
+      onGoBack: (param) => this.refresh(param),
     })
+  }
+
+  refresh = ({hasToUpdateParent}) => {
+    console.log('DEKCITEM: inside refresh .............');
+    console.log('hasToUpdateParent: ', hasToUpdateParent)
+    const hasToUpdate= hasToUpdateParent? hasToUpdateParent: false
+    console.log('hastoUpdate:' , hasToUpdate)
+    this.setState({hasToUpdate: hasToUpdate})  
   }
 
 
   render() { 
-
+    console.log('DECKITEM inside RENDER--------------------------');
     const {keyDeck,fromNewQuestion} = this.props.navigation.state.params
 
     if (this.state.isLoading) {
+      console.log('-------------isloading is :', this.state.isLoading)
       return <View><Text>Loading Deck on DeckItem component...</Text></View>;
     }
-    const {updatedDeck}= this.state
+    console.log('-----------isloading is :', this.state.isLoading)
 
-    if (fromNewQuestion && !updatedDeck) {
-      console.log('go  to updateState()...........')
+    if (this.state.hasToUpdate) {
+      console.log('----------- hasToUpdate is:',this.state.hasToUpdate)
       this.updateState()
+      return <View><Text>Updating DeckItem after submit a NewQuestion...</Text></View>;
     }
-    
+
+    console.log('----------- hasToUpdate is:', this.state.hasToUpdate)
     const {deck}= this.state
     const questionsLength = Object.keys(deck.questions).length
 
+    console.log("------------finally render DeckItem")
     return (    
       <View style={styles.container}>        
         <View style={styles.deckprops}>

@@ -27,8 +27,8 @@ class NewQuestion extends Component {
   handleAnswerChange = answer => this.setState({ answer });
 
 
-  handleSubmit = () =>{
-    console.log('save NEW CARD')
+  handleSubmit = async() =>{
+    console.log('NEWQUESTION: inside handleSubmit xxxxxxxxxxxxxxxx')
 
     let { keyDeck, title, questionsLength, questions} = this.props.navigation.state.params;
     const newQuestion = this.state;    
@@ -48,31 +48,30 @@ class NewQuestion extends Component {
 
     console.log('decks_delta: ',decks_delta)
     
-    this.saveKey(STORAGE_KEY, decks_delta)
-   
-
+    await this.saveKey(STORAGE_KEY, decks_delta)
+    
+    console.log('after savekey')
+    this.props.navigation.state.params.onGoBack({ hasToUpdateParent: true })           
     this.props.navigation.navigate('DeckItem',{
-      keyDeck,
-      fromNewQuestion: true,
+      keyDeck
     })
-
   }
 
   async saveKey(storageKey, decks_delta) {
-    console.log('inside saveKey.............')
+    console.log('NEWQUESTION: inside saveKey xxxxxxxxxxxxxxxx')
     try {
-      await AsyncStorage.mergeItem(storageKey, JSON.stringify(decks_delta), () => {
-        AsyncStorage.getItem(storageKey, (err, result) => {
-          console.log('result:  ', JSON.parse(result));
-        });
-      });
+      await AsyncStorage.mergeItem(storageKey, JSON.stringify(decks_delta));
+      console.log('xxxxxxxxx after await')
+      return
     } catch (error) {
       console.log("Error saving data" + error);
     }
   }
  
   render() {
+    console.log('NEWQUESTION: inside render xxxxxxxxxxxxxxxx')
     const { title} = this.props.navigation.state.params;
+    console.log('navigation.state.params:', this.props.navigation.state.params)
     const { question, answer } = this.state
     
     return ( 
