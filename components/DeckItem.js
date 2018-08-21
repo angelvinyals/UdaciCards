@@ -6,23 +6,31 @@ import {
   View,
   TouchableOpacity,
   AsyncStorage,
-  Button
+  Button,
+  TouchableHighlight,
 } from 'react-native';
 import {white, gray, black } from '../utils/colors'
-import {STORAGE_KEY, decks2} from'../utils/_DATA';
+import {STORAGE_KEY} from'../utils/_DATA';
+import Icon from 'react-native-vector-icons/FontAwesome';
+//import Icon from 'react-native-vector-icons/MaterialIcon';
+
 
 class DeckItem extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: navigation.getParam('title', '...some title on DeckItem'),
-      headerRight: <Button 
-        title="test" 
-        onPress={() => {
-            navigation.state.params.onGoBack({'hasToUpdateParent': navigation.getParam('hasToUpdateParent')})            
-            navigation.goBack()
-          }          
-        }
-      />
+      title: navigation.getParam('title', '...some title on DeckItem'),      
+      headerLeft: (
+        <Button 
+          title="back"
+          color="black" 
+          headerLeftContainerStyle= {{padding: 20}}
+          onPress={() => {
+              navigation.state.params.onGoBack({'hasToUpdateParent': navigation.getParam('hasToUpdateParent')})            
+              navigation.goBack()
+            }          
+          }
+        />
+      ),
     }
   };
 
@@ -109,6 +117,19 @@ class DeckItem extends Component {
     this.setState({hasToUpdate: hasToUpdate})  
   }
 
+  onPressQuiz = () => { 
+    console.log('DECKITEM inside onPressQuiz--------------------------');
+    console.log('state.deck: ', this.state.deck)
+    const {keyDeck} = this.props.navigation.state.params 
+    this.props.navigation.navigate('Quiz',{
+      keyDeck,
+      title: this.state.deck.title,
+      questions: this.state.deck.questions,
+      questionsLength: Object.keys(this.state.deck.questions).length,
+      //onGoBackfromQuiz: (param) => this.refreshFromQuiz(param),
+    })
+  }
+
 
   render() { 
     console.log('DECKITEM inside RENDER--------------------------');
@@ -146,7 +167,7 @@ class DeckItem extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonStartQuiz}
-            onPress={() => this.props.navigation.navigate('Quiz')}
+            onPress={this.onPressQuiz}
           >
             <Text style={[styles.buttonText,{color:white}]}>Start Quiz </Text>
           </TouchableOpacity>
@@ -157,6 +178,12 @@ class DeckItem extends Component {
 }
 
 const styles = StyleSheet.create({
+  backButton:{
+    color: white,
+    backgroundColor: black,
+    padding:10,
+    margin: 10,
+  },
   container: {
     flex: 1,    
     marginTop: 0,    
