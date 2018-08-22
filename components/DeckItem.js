@@ -97,7 +97,7 @@ class DeckItem extends Component {
   }
 
   onPressAddCard = () => { 
-    console.log('DECKITEM inside onPressAddCard--------------------------');
+    console.log('DECKITEM inside onPressAddCard --------------------------');
     console.log('state.deck: ', this.state.deck)
     const {keyDeck} = this.props.navigation.state.params 
     this.props.navigation.navigate('NewQuestion',{
@@ -118,14 +118,10 @@ class DeckItem extends Component {
   }
 
   onPressQuiz = () => { 
-    console.log('DECKITEM inside onPressQuiz--------------------------');
-    console.log('state.deck: ', this.state.deck)
+    console.log('DECKITEM inside onPressQuiz -------------------------');
     const {keyDeck} = this.props.navigation.state.params 
     this.props.navigation.navigate('Quiz',{
       keyDeck,
-      title: this.state.deck.title,
-      questions: this.state.deck.questions,
-      questionsLength: Object.keys(this.state.deck.questions).length,
       //onGoBackfromQuiz: (param) => this.refreshFromQuiz(param),
     })
   }
