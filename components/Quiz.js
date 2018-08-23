@@ -105,9 +105,8 @@ class Quiz extends Component {
       }
       return data
     } else {
-      console.log('!!!!!!all questions passed')
-      this.setState({allQuestionsCorrect: true})
-      return
+      console.log('!!!!!!all questions passed')      
+      return 
     }    
   }
 
@@ -117,16 +116,22 @@ class Quiz extends Component {
     console.log('getQuestion in handleCorrectIncorrect............')
     const questionData= this.getQuestion({answer, questionKey})
     console.log('after questionData in handleCorrectIncorrect...........')
-    console.log('questionData: ', questionData)    
-    questionsKeyArray= questionData.questionsKeyArray
-    console.log('questionsKeyArray',questionsKeyArray)
-    const{questionNumber, question}= questionData  
-    this.setState((prevState, props) => ({
-      isLoadingData: false,
-      questionNumber: ++prevState.questionNumber,
-      question,
-      questionsKeyArray,
-    }))    
+    if (questionData){
+      console.log('questionData: ', questionData)    
+      questionsKeyArray= questionData.questionsKeyArray
+      console.log('questionsKeyArray',questionsKeyArray)
+      const{questionNumber, question}= questionData  
+      this.setState((prevState, props) => ({
+        isLoadingData: false,
+        questionNumber: ++prevState.questionNumber,
+        question,
+        questionsKeyArray,
+      }))     
+    } else {
+      console.log('!!!!!!all questions passed')      
+      this.setState({allQuestionsCorrect:true})
+    }       
+      
   }
 
   async saveKey(storageKey, decks_delta) {
