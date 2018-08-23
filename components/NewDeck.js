@@ -4,9 +4,13 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  AsyncStorage
 } from 'react-native';
 import {white, gray, black, red, green, purple} from '../utils/colors'
+
+import {STORAGE_KEY} from'../utils/_DATA';
+
 
 
 class NewDeck extends Component { 
@@ -16,15 +20,46 @@ class NewDeck extends Component {
   }
 
   state:{
-    text: '' 
+    title:'' 
   }
 
-  submit = () =>{
-    console.log('submit')
+  handleTitleChange = title => this.setState({ title });
+
+  handleSubmit = async() =>{
+    console.log('NEWDECK: inside handleSubmit xxxxxxxxxxxxxxxx')
+    const {title} = this.state
+    const decks_delta= {
+      [`deck${title}`]:{
+        key: `deck${title}`,
+        title: title,
+        questions:{},
+      }
+    }
+
+    console.log('decks_delta: ',decks_delta)
+    
+    await this.saveKey(STORAGE_KEY, decks_delta)
+    
+    console.log('after savekey')
+    //this.props.navigation.state.params.onGoBack({ hasToUpdateParent: true })           
+    this.props.navigation.navigate('DeckList',{ 
+      hasToUpdateDeck: true 
+    })
+  }
+
+  async saveKey(storageKey, decks_delta) {
+    console.log('NEWDECK: inside saveKey xxxxxxxxxxxxxxxx')
+    try {
+      await AsyncStorage.mergeItem(storageKey, JSON.stringify(decks_delta));
+      console.log('xxxxxxxxx after await')
+      return
+    } catch (error) {
+      console.log("Error saving data" + error);
+    }
   }
  
   render() {
-    
+    console.log('NEWDECK inside RENDER--------------------------');
     return (           
         <View style={styles.containerMain}>       
           <View style={styles.containerProps}>
@@ -33,14 +68,14 @@ class NewDeck extends Component {
           <View style={styles.containerInput} >
             <TextInput
               style={styles.inputDeckTitle}
-              placeholder= {'Deck Title'} 
-              onChangeText={(text) => this.setState({text})}
+              placeholder= {'Please insert Deck Title'} 
+              onChangeText={this.handleTitleChange}
             />
           </View>
           <View style={styles.containerButtons}>
             <TouchableOpacity
               style={styles.buttonSubmit}
-              onPress={this.submit}
+              onPress={this.handleSubmit}
             >
               <Text style={[styles.buttonText,{color:white}]}>Submit</Text>
             </TouchableOpacity>

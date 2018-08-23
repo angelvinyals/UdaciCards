@@ -65,6 +65,7 @@ class DeckList extends Component {
 
   updateState = async () => {
     console.log('DEKCLIST: inside updateState .............');
+    this.props.navigation.setParams('hasToUpdateDeck', false);
     const decks =  await this.getKey(STORAGE_KEY)
     console.log('decks: ', decks);
     if (decks !== null) {
@@ -108,9 +109,11 @@ class DeckList extends Component {
       return <View><Text>Loading Decks on DeckList component...</Text></View>;
     }
     console.log('isLoading is :', this.state.isLoading)
-
-    if (this.state.hasToUpdate) {
+    const hastoUpdateDeck = this.props.navigation.getParam('hasToUpdateDeck', false);
+    console.log('hastoUpdateDeck is :', this.state.hastoUpdateDeck)
+    if (this.state.hasToUpdate || hastoUpdateDeck) {
       console.log('----------- hasToUpdate is:',this.state.hasToUpdate)
+
       this.updateState()
       return <View><Text>Updating Decks on DeckList component...</Text></View>;
     }

@@ -57,7 +57,7 @@ const MainNavigator  = createStackNavigator(
       screen: NewDeck,
       navigationOptions: {
           header:null
-      }
+      },
     },
     NewQuestion: {
       screen: NewQuestion,
