@@ -19,18 +19,23 @@ class QuizView extends Component {
       isShowingQuestion: !prevState.isShowingQuestion
     }));
   }
-  
-  handleAnswered =(data) => {
-    console.log('QUIZView inside handleAnswered.................')
-    console.log(data)
 
+  handleAnswered =(answer, questionKey) => {
+    console.log('QUIZView inside handleAnswered.................')
+    console.log('answer:', answer)
+    console.log('questionKey:', questionKey)
+    const data= {answer, questionKey}
+    this.props.handleCorrectIncorrect(data)
+    console.log('data:',data)
   }
  
   render() {
     console.log('QuizView inside RENDER--------------------------');   
+
     const {isShowingQuestion} = this.state
     console.log('isShowingQuestion:', isShowingQuestion)
-    const {question, questionNumber, quantityOfQuestions}= this.props
+
+    const {question, questionNumber, quantityOfQuestions, handleCorrectIncorrect }= this.props
     console.log('question: ', question)   
     console.log('-------------isShowingQuestion is :', isShowingQuestion)
     return (           
@@ -47,13 +52,13 @@ class QuizView extends Component {
         <View style={styles.containerButtons}>
           <TouchableOpacity
             style={styles.buttonCorrect}
-            onPress={() => this.handleAnswered('correct')}
+            onPress={() => this.handleAnswered('CORRECT',question.key)}
           >
             <Text style={styles.buttonText}>Correct</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonIncorrect}
-            onPress={() => this.handleAnswered('Incorrect')}
+            onPress={() => this.handleAnswered('INCORRECT',question.key)}
           >
             <Text style={styles.buttonText}>Incorrect</Text>
           </TouchableOpacity>

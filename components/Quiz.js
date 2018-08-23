@@ -11,6 +11,7 @@ import {
 import {white, gray, black, red,  green} from '../utils/colors'
 import {STORAGE_KEY} from'../utils/_DATA';
 import QuizView from './QuizView.js'
+import CongratulationsView from './CongratulationsView.js'
 
 const questionItem = 2
 const quizLength = 2
@@ -33,6 +34,7 @@ class Quiz extends Component {
     quantityOfQuestions:0,
     questionsKeyArray: [],
     questionKeyToRender:'',
+    allQuestionsCorrect:false,
     
   };
 
@@ -57,7 +59,17 @@ class Quiz extends Component {
         questionsKeyArray,
         quantityOfQuestions,
       }) 
-      this.getQuestion()
+      console.log('getQuestion in componentDidMount............')
+      const questionData= await this.getQuestion()
+      console.log('after questionData in componentDidMount............')
+      questionsKeyArray= questionData.questionsKeyArray
+      const{questionNumber, question}= questionData
+      this.setState((prevState, props) => ({
+        isLoadingData: false,
+        questionNumber: ++prevState.questionNumber,
+        question,
+        questionsKeyArray,
+      }))
     } else {
       console.log('IMPORTANT : DECK NOT SAVED IN STATE COMPONENT'); 
     }       
@@ -74,19 +86,58 @@ class Quiz extends Component {
     }
   }
 
-  getQuestion = () => {
+  getQuestion = ({answer='', questionKey=''}='') => {
     console.log('QUIZ inside getQuestion .............');
     const{questions, questionsKeyArray, questionNumber}= this.state
-    const questionKeyToRender = questionsKeyArray.shift()
-    console.log('questionKeyToRender: ', questionKeyToRender)
-    const question= questions[questionKeyToRender]
-    console.log('question', question) 
+    console.log('questionsKeyArray',questionsKeyArray)
+    if (answer==='INCORRECT'){
+      questionsKeyArray.push(questionKey)     
+    }
+    if(questionsKeyArray.length){
+      const questionKeyToRender = questionsKeyArray.shift()
+      console.log('questionKeyToRender: ', questionKeyToRender)
+      console.log('questionsKeyArray',questionsKeyArray)
+      const question= questions[questionKeyToRender]
+      console.log('question', question) 
+      const data={
+        question,
+        questionsKeyArray,
+      }
+      return data
+    } else {
+      console.log('!!!!!!all questions passed')
+      this.setState({allQuestionsCorrect: true})
+      return
+    }    
+  }
+
+  handleCorrectIncorrect = ({answer, questionKey}) =>{
+    console.log('QUIZ inside handleCorrectIncorrect .............')
+    console.log('answer:', answer)    
+    console.log('getQuestion in handleCorrectIncorrect............')
+    const questionData= this.getQuestion({answer, questionKey})
+    console.log('after questionData in handleCorrectIncorrect...........')
+    console.log('questionData: ', questionData)    
+    questionsKeyArray= questionData.questionsKeyArray
+    console.log('questionsKeyArray',questionsKeyArray)
+    const{questionNumber, question}= questionData  
     this.setState((prevState, props) => ({
       isLoadingData: false,
       questionNumber: ++prevState.questionNumber,
       question,
       questionsKeyArray,
-    }))
+    }))    
+  }
+
+  async saveKey(storageKey, decks_delta) {
+    console.log('NEWQUESTION: inside saveKey xxxxxxxxxxxxxxxx')
+    try {
+      await AsyncStorage.mergeItem(storageKey, JSON.stringify(decks_delta));
+      console.log('xxxxxxxxx after await')
+      return
+    } catch (error) {
+      console.log("Error saving data" + error);
+    }
   }
 
   render() {
@@ -98,10 +149,18 @@ class Quiz extends Component {
     }
     console.log('-----------isLoadingData is :',this.state.isLoadingData)
 
+    if (this.state.allQuestionsCorrect) {
+      console.log('------------allQuestionsCorrect is :', this.state.allQuestionsCorrect)
+      return <CongratulationsView />;
+    }
+    console.log('-----------isLoadingData is :',this.state.isLoadingData)
+
     return <QuizView  
       question={this.state.question} 
       questionNumber= {this.state.questionNumber} 
-      quantityOfQuestions={this.state.quantityOfQuestions}/>   
+      quantityOfQuestions={this.state.quantityOfQuestions}
+      handleCorrectIncorrect={this.handleCorrectIncorrect}
+    />   
   }
 }
 
