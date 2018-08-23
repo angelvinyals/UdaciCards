@@ -65,14 +65,14 @@ class DeckList extends Component {
 
   updateState = async () => {
     console.log('DEKCLIST: inside updateState .............');
-    this.props.navigation.setParams('hasToUpdateDeck', false);
+
     const decks =  await this.getKey(STORAGE_KEY)
     console.log('decks: ', decks);
     if (decks !== null) {
       // We have data!!
-      //console.log('navigation params:', this.props.navigation.state.params)
-      //this.props.navigation.setParams({ hasToUpdateParent: true })
-      //console.log('navigation params:', this.props.navigation.state.params)
+      console.log('navigation params:', this.props.navigation.state.params)
+      await this.props.navigation.setParams({ hasToUpdateDeck: false })
+      await console.log('navigation params:', this.props.navigation.state.params)
       await this.setState({         
         decks:JSON.parse(decks),
         hasToUpdate : false,
@@ -109,16 +109,18 @@ class DeckList extends Component {
       return <View><Text>Loading Decks on DeckList component...</Text></View>;
     }
     console.log('isLoading is :', this.state.isLoading)
+
     const hastoUpdateDeck = this.props.navigation.getParam('hasToUpdateDeck', false);
-    console.log('hastoUpdateDeck is :', this.state.hastoUpdateDeck)
+    console.log('hastoUpdateDeck is :', this.props.navigation.getParam('hasToUpdateDeck', false))
+
     if (this.state.hasToUpdate || hastoUpdateDeck) {
       console.log('----------- hasToUpdate is:',this.state.hasToUpdate)
-
+      console.log('------------hastoUpdateDeck is :', this.props.navigation.getParam('hasToUpdateDeck', false))
       this.updateState()
       return <View><Text>Updating Decks on DeckList component...</Text></View>;
     }
     console.log('----------- hasToUpdate is:', this.state.hasToUpdate)
-
+    console.log('............hastoUpdateDeck is :', this.props.navigation.getParam('hasToUpdateDeck', false))
 
     const{decks} = this.state   
     const decksArray= Object.values(decks)
